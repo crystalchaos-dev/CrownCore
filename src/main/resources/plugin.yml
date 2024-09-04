@@ -1,0 +1,12 @@
+name: CrownCore
+version: 1.0.0
+main: de.obey.crown.core.Init
+author: Obey
+website: dsc.gg/crownplugins
+api-version: '1.20'
+
+depend:
+  - PlaceholderAPI
+
+commands:
+  location:
