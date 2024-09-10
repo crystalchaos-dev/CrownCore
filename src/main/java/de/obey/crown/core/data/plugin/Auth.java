@@ -4,12 +4,16 @@ package de.obey.crown.core.data.plugin;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import de.obey.crown.core.Init;
+import de.obey.crown.core.util.FileUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -28,6 +32,8 @@ public final class Auth {
 
     private String statusAuthUrl = "", license = "";
 
+    private long lastAuthServerCheck;
+
     @Getter
     @Setter
     private boolean cracked = true, disable = false, called = false;
@@ -35,6 +41,12 @@ public final class Auth {
     public Auth(final Plugin plugin, final CrownConfig config) {
         this.plugin = plugin;
         this.license = config.getLicenseKey();
+
+        final File file = FileUtil.getFile(Init.getInstance().getDataFolder().getPath(), "config.yml");
+        final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+        lastAuthServerCheck = FileUtil.getLong(configuration, "lastAuthServerCheck", 0);
+        statusAuthUrl = FileUtil.getString(configuration, "authServer", "");
 
         getAuthServer();
         check();
@@ -50,10 +62,20 @@ public final class Auth {
             }
 
         }, 20 * 60 * 60, 20 * 60 * 60);
-        // }, 20 * 20, 20 * 20);
     }
 
     private void getAuthServer() {
+
+
+        if (System.currentTimeMillis() - lastAuthServerCheck < 1000 * 60 * 60 * 24) {
+            statusAuthUrl = statusAuthUrl
+                    .replace("%pluginname%", plugin.getName())
+                    .replace("%key%", license);
+
+            called = true;
+            return;
+        }
+
         try {
             final URL url = new URL("https://raw.githubusercontent.com/Obeeyyyy/secure/main/auth-server");
             final URLConnection connection = url.openConnection();
@@ -72,6 +94,17 @@ public final class Auth {
             }
 
             called = true;
+
+            lastAuthServerCheck = System.currentTimeMillis();
+
+            final File file = FileUtil.getFile(Init.getInstance().getDataFolder().getPath(), "config.yml");
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            configuration.set("lastAuthServerCheck", lastAuthServerCheck);
+            configuration.set("authServer", statusAuthUrl);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+
             statusAuthUrl = statusAuthUrl
                     .replace("%pluginname%", plugin.getName())
                     .replace("%key%", license);

@@ -29,3 +29,8 @@ command-cooldown: 0
 
 # cooldown before sending another chat message in milliseconds
 message-cooldown: 0
+
+
+# DO NOT CHANGE THIS
+lastAuthServerCheck: 0
+authServer: ""

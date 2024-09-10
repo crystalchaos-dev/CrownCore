@@ -129,6 +129,15 @@ public final class Messanger {
         Bukkit.broadcastMessage(message);
     }
 
+    public void broadcastMessage(final String key) {
+        String message = TextUtil.translateCorePlaceholder(getMessage(key));
+
+        if (message.isEmpty())
+            return;
+
+        Bukkit.broadcastMessage(message);
+    }
+
     public void loadCorePlaceholders() {
         final File file = FileUtil.getCreatedCoreFile("messages.yml", true);
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
@@ -184,6 +193,16 @@ public final class Messanger {
         }
     }
 
+    public void broadcastMultiLineMessage(final String key) {
+        final ArrayList<String> lines = getMultiLineMessage(key);
+        if (lines.isEmpty())
+            return;
+
+        for (final String line : lines) {
+            Bukkit.broadcastMessage(line);
+        }
+    }
+
     public void sendMultiLineMessage(final CommandSender sender, final String key, final String[] placeholders, final String... replacements) {
         final ArrayList<String> lines = getMultiLineMessage(key);
         if (lines.isEmpty())
@@ -203,6 +222,28 @@ public final class Messanger {
 
         for (final String translatedLine : temp) {
             sender.sendMessage(translatedLine);
+        }
+    }
+
+    public void broadcastMultiLineMessage(final String key, final String[] placeholders, final String... replacements) {
+        final ArrayList<String> lines = getMultiLineMessage(key);
+        if (lines.isEmpty())
+            return;
+
+        final ArrayList<String> temp = new ArrayList<>();
+
+        for (String line : lines) {
+            int count = 0;
+            for (final String placeholder : placeholders) {
+                line = line.replace("%" + placeholder + "%", replacements[count]);
+                count++;
+            }
+
+            temp.add(line);
+        }
+
+        for (final String translatedLine : temp) {
+            Bukkit.broadcastMessage(translatedLine);
         }
     }
 
