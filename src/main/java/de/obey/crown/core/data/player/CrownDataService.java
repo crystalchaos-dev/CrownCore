@@ -36,7 +36,19 @@ public abstract class CrownDataService<E> {
         });
     }
 
+    public CompletableFuture<E> loadAsyncNoCaching(final UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+
+            if(cache.containsKey(uuid))
+                return cache.get(uuid);
+
+            return loadNoCache(uuid);
+        });
+    }
+
     public abstract E load(final UUID uuid);
+
+    public abstract E loadNoCache(final UUID uuid);
 
     public CompletableFuture<E> saveAsync(final UUID uuid) {
         return CompletableFuture.supplyAsync(() -> save(uuid));

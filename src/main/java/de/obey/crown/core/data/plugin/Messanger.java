@@ -44,17 +44,43 @@ public final class Messanger {
     private final Map<String, ArrayList<String>> multiLineMessages = Maps.newConcurrentMap();
 
     public String getMessage(final String key) {
-        if (!messages.containsKey(key))
+        if (!messages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            configuration.set(key, "");
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return "";
+        }
+
+        if (messages.get(key).equalsIgnoreCase(""))
             return "";
 
         return TextUtil.translateCorePlaceholder(messages.get(key));
     }
 
     public String getMessage(final String key, final String[] placeholders, final String... replacements) {
-        if (!messages.containsKey(key))
+        if (!messages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            String value = "";
+
+            for (String placeholder : placeholders) {
+                value = value + "%" + placeholder + "%";
+            }
+
+            configuration.set(key, value);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return value;
+        }
+
+        if (messages.get(key).equalsIgnoreCase(""))
             return "";
 
-        String message = getMessage(key);
+        String message = messages.get(key);
 
         int count = 0;
         for (final String placeholder : placeholders) {
@@ -86,16 +112,10 @@ public final class Messanger {
     }
 
     public void sendMessage(final CommandSender sender, final String key, final String[] placeholders, final String... replacements) {
-        String message = getMessage(key);
+        String message = getMessage(key, placeholders, replacements);
 
         if (message.isEmpty())
             return;
-
-        int count = 0;
-        for (final String placeholder : placeholders) {
-            message = message.replace("%" + placeholder + "%", replacements[count]);
-            count++;
-        }
 
         sender.sendMessage(TextUtil.translateCorePlaceholder(message));
     }
@@ -328,8 +348,26 @@ public final class Messanger {
         }
     }
 
+    public double isValidDouble(final String input) {
+        try {
+            return Double.parseDouble(input);
+        } catch (final NumberFormatException exception) {
+            return -1D;
+        }
+    }
+
     public int isValidInt(final CommandSender sender, final String input) {
         final int number = isValidInt(input);
+
+        if (number < 0) {
+            sendMessage(sender, "invalid-number");
+        }
+
+        return number;
+    }
+
+    public double isValidDouble(final CommandSender sender, final String input) {
+        final double number = isValidInt(input);
 
         if (number < 0) {
             sendMessage(sender, "invalid-number");
