@@ -3,7 +3,7 @@
 
 package de.obey.crown.core.listener;
 
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.handler.LocationHandler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +22,23 @@ public final class PlayerLogin implements Listener {
     private final String you = "https://dsc.gg/crownplugins";
     private final String doing = "https://dsc.gg/crownplugins";
 
-    private final Init core;
+    private final CrownCore crownCore;
 
     @EventHandler
     public void on(final AsyncPlayerPreLoginEvent event) {
-        if (!core.isCoreStarted()) {
+        if (!crownCore.isCoreStarted()) {
 
-            event.setKickMessage(core.getCrownConfig().getMessanger().getMessage("kick-server-starting"));
+            event.setKickMessage(crownCore.getCrownConfig().getMessanger().getMessage("kick-server-starting"));
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
         }
     }
 
     @EventHandler
     public void on(final PlayerSpawnLocationEvent event) {
-        if (!core.isCoreStarted())
+        if (!crownCore.isCoreStarted())
             return;
-
-        if (core.getCrownConfig().isTeleportOnJoin())
+        
+        if (crownCore.getCrownConfig().isTeleportOnJoin() || !event.getPlayer().hasPlayedBefore())
             event.setSpawnLocation(LocationHandler.getLocation("spawn"));
     }
 

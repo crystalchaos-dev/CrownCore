@@ -4,7 +4,7 @@
 package de.obey.crown.core.listener;
 
 import de.obey.crown.core.Config;
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.handler.LocationHandler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public final class PlayerDeath implements Listener {
     public void on(final PlayerDeathEvent event) {
 
         if (config.isInstantRespawn()) {
-            Bukkit.getScheduler().runTaskLater(Init.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(CrownCore.getInstance(), () -> {
                 event.getEntity().spigot().respawn();
             }, 2);
         }
@@ -40,7 +40,7 @@ public final class PlayerDeath implements Listener {
     public void on(final PlayerRespawnEvent event) {
         if (LocationHandler.getLocation("spawn") == null)
             return;
-        
+
         event.setRespawnLocation(LocationHandler.getLocation("spawn"));
     }
 }

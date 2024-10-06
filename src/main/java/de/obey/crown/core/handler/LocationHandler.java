@@ -4,7 +4,7 @@
 package de.obey.crown.core.handler;
 
 import com.google.common.collect.Maps;
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.util.FileUtil;
 import de.obey.crown.core.util.TextUtil;
 import lombok.Getter;
@@ -37,10 +37,11 @@ public final class LocationHandler {
 
     public void deleteLocation(final String name) {
         locations.remove(name);
+        saveLocations();
     }
 
     public void loadLocations() {
-        final File file = FileUtil.getFile(Init.getInstance().getDataFolder().getPath() + "/", "config.yml");
+        final File file = FileUtil.getFile(CrownCore.getInstance().getDataFolder().getPath() + "/", "config.yml");
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         if (!configuration.contains("locations"))
@@ -53,7 +54,7 @@ public final class LocationHandler {
     }
 
     public void saveLocations() {
-        final File file = FileUtil.getFile(Init.getInstance().getDataFolder().getPath() + "/", "config.yml");
+        final File file = FileUtil.getFile(CrownCore.getInstance().getDataFolder().getPath() + "/", "config.yml");
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         if (locations.isEmpty())

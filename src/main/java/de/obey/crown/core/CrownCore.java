@@ -1,5 +1,6 @@
 package de.obey.crown.core;
 
+import de.obey.crown.core.command.CoreCommand;
 import de.obey.crown.core.command.LocationCommand;
 import de.obey.crown.core.event.CoreStartEvent;
 import de.obey.crown.core.handler.LocationHandler;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Setter
-public final class Init extends JavaPlugin {
+public final class CrownCore extends JavaPlugin {
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -39,7 +40,7 @@ public final class Init extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        
+
         // generate core message file with default messages
         FileUtil.getGeneratedCoreFile("messages.yml", true);
         FileUtil.getGeneratedCoreFile("config.yml", true);
@@ -82,6 +83,10 @@ public final class Init extends JavaPlugin {
         final LocationCommand locationCommand = new LocationCommand(crownConfig.getMessanger());
         getCommand("location").setExecutor(locationCommand);
         getCommand("location").setTabCompleter(locationCommand);
+
+        final CoreCommand coreCommand = new CoreCommand(crownConfig.getMessanger(), crownConfig);
+        getCommand("crowncore").setExecutor(coreCommand);
+        getCommand("crowncore").setTabCompleter(coreCommand);
     }
 
     private void loadListener() {
@@ -92,7 +97,7 @@ public final class Init extends JavaPlugin {
         pluginManager.registerEvents(new PlayerChat(crownConfig), this);
     }
 
-    public static Init getInstance() {
-        return getPlugin(Init.class);
+    public static CrownCore getInstance() {
+        return getPlugin(CrownCore.class);
     }
 }

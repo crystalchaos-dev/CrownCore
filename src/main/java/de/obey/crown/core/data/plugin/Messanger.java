@@ -4,7 +4,7 @@
 package de.obey.crown.core.data.plugin;
 
 import com.google.common.collect.Maps;
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.util.FileUtil;
 import de.obey.crown.core.util.TextUtil;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public final class Messanger {
     private final String you = "https://dsc.gg/crownplugins";
     private final String doing = "https://dsc.gg/crownplugins";
 
-    private final Init core = Init.getInstance();
+    private final CrownCore crownCore = CrownCore.getInstance();
     @NonNull
     private final Plugin plugin;
 
@@ -71,7 +71,7 @@ public final class Messanger {
                 value = value + "%" + placeholder + "%";
             }
 
-            configuration.set(key, value);
+            configuration.set("messages." + key, value);
 
             FileUtil.saveConfigurationIntoFile(configuration, file);
             return value;
@@ -100,7 +100,6 @@ public final class Messanger {
 
         sender.sendMessage(TextUtil.translateColors(send));
     }
-
 
     public void sendMessage(final CommandSender sender, final String key) {
         String message = getMessage(key);
@@ -198,6 +197,27 @@ public final class Messanger {
 
         for (final String line : lines) {
             temp.add(TextUtil.translateColors(line));
+        }
+
+        return temp;
+    }
+
+    public ArrayList<String> getMultiLineMessage(final String key, final String[] placeholders, final String... replacements) {
+        if (!multiLineMessages.containsKey(key))
+            return new ArrayList<>();
+
+        final ArrayList<String> lines = multiLineMessages.get(key);
+        final ArrayList<String> temp = new ArrayList<>();
+
+        for (String line : lines) {
+            int count = 0;
+            for (final String placeholder : placeholders) {
+                line = line.replace("%" + placeholder + "%", replacements[count]);
+                count++;
+            }
+
+            line = TextUtil.translateColors(line);
+            temp.add(line);
         }
 
         return temp;

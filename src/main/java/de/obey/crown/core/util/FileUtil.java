@@ -3,7 +3,7 @@
 
 package de.obey.crown.core.util;
 
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -55,17 +55,17 @@ public final class FileUtil {
     }
 
     public File getGeneratedCoreFile(final String fileName, final boolean generate) {
-        final File file = new File(Init.getInstance().getDataFolder() + "/" + fileName);
+        final File file = new File(CrownCore.getInstance().getDataFolder() + "/" + fileName);
 
         if (!file.exists() && generate) {
-            Init.getInstance().saveResource(fileName, false);
+            CrownCore.getInstance().saveResource(fileName, false);
         }
 
         return file;
     }
 
     public File getCreatedCoreFile(final String fileName, final boolean create) {
-        final File file = new File(Init.getInstance().getDataFolder() + "/" + fileName);
+        final File file = new File(CrownCore.getInstance().getDataFolder() + "/" + fileName);
 
         if (!file.exists() && create) {
             try {

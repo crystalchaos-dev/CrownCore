@@ -16,7 +16,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,14 +87,98 @@ public final class TextUtil {
         return (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "." + (millis / 100) + "s" : "0." + (millis / 100) + "s");
     }
 
-    public String formatNumber(final long value) {
-        return NumberFormat.getNumberInstance().format(value);
-    }
+    final DecimalFormat decimalFormat = new DecimalFormat("#,###.##", new DecimalFormatSymbols(Locale.ENGLISH));
 
-    final DecimalFormat decimalFormat = new DecimalFormat("0.0#");
+    public String formatNumber(final long value) {
+        return decimalFormat.format(value);
+    }
 
     public String formatNumber(final double value) {
         return decimalFormat.format(value);
+    }
+
+    public String formatNumberShort(final double value) {
+        String edited = decimalFormat.format(value);
+
+        if (value <= 999)
+            return "" + value;
+
+        // 1,001,001,100,000,000
+
+        if (edited.length() == 5) {
+            edited = edited.substring(0, 4) + "k";
+        } else if (edited.length() == 6) {
+            edited = edited.substring(0, 5) + "k";
+        } else if (edited.length() == 7) {
+            edited = edited.substring(0, 6) + "k";
+        } else if (edited.length() == 9) {
+            edited = edited.substring(0, 4) + "M";
+        } else if (edited.length() == 10) {
+            edited = edited.substring(0, 5) + "M";
+        } else if (edited.length() == 11) {
+            edited = edited.substring(0, 6) + "M";
+        } else if (edited.length() == 13) {
+            edited = edited.substring(0, 4) + "B";
+        } else if (edited.length() == 14) {
+            edited = edited.substring(0, 5) + "B";
+        } else if (edited.length() == 15) {
+            edited = edited.substring(0, 6) + "B";
+        } else if (edited.length() == 17) {
+            edited = edited.substring(0, 4) + "T";
+        } else if (edited.length() == 18) {
+            edited = edited.substring(0, 5) + "T";
+        } else if (edited.length() == 19) {
+            edited = edited.substring(0, 6) + "T";
+        } else {
+            edited = value + "";
+        }
+
+        return edited.replace(",00", "");
+    }
+
+    public double getDoubleFromStringwithSuffix(String text) {
+        text = text.toLowerCase();
+
+        if (text.contains("k")) {
+            try {
+                String number = text
+                        .replace("k", "")
+                        .replace(",", ".");
+                double value = Double.parseDouble(number) * 1000;
+                return value;
+            } catch (final NumberFormatException exception) {
+                return -1;
+            }
+        }
+
+        if (text.contains("mil") || text.contains("m")) {
+            try {
+                String number = text
+                        .replace("m", "")
+                        .replace("mil", "")
+                        .replace(",", ".");
+
+                double value = Double.parseDouble(number) * 1_000_000;
+                return value;
+            } catch (final NumberFormatException exception) {
+                return -1;
+            }
+        }
+
+        if (text.contains("bil") || text.contains("b")) {
+            try {
+                String number = text
+                        .replace("bil", "")
+                        .replace("b", "")
+                        .replace(",", ".");
+                double value = Double.parseDouble(number) * 1_000_000_000;
+                return value;
+            } catch (final NumberFormatException exception) {
+                return -1;
+            }
+        }
+
+        return -1;
     }
 
     public void sendActionBar(final Player player, final String message) {

@@ -3,11 +3,10 @@
 
 package de.obey.crown.core.data.plugin;
 
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.util.FileUtil;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -22,17 +21,11 @@ public class CrownConfig implements CrowPlugin {
     private final String you = "https://dsc.gg/crownplugins";
     private final String doing = "https://dsc.gg/crownplugins";
 
-    @Setter
-    private String licenseKey;
-
-    private final Init core = Init.getInstance();
+    private final CrownCore crownCore = CrownCore.getInstance();
     @NonNull
     private final Plugin plugin;
 
     private Messanger messanger;
-
-    @Setter
-    private Auth auth;
 
     private File messageFile, configFile;
 
@@ -68,13 +61,6 @@ public class CrownConfig implements CrowPlugin {
     }
 
     public void loadConfig() {
-    }
-
-    @Override
-    public void checkAuth() {
-        if (auth.isDisable() || !auth.isCalled()) {
-            Bukkit.getPluginManager().disablePlugin(plugin);
-        }
     }
 
     public void saveConfig() {

@@ -8,7 +8,7 @@ package de.obey.crown.core.util;
 
 import com.google.common.collect.Maps;
 import de.obey.crown.core.Config;
-import de.obey.crown.core.Init;
+import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.data.plugin.Messanger;
 import de.obey.crown.core.data.plugin.TeleportMessageType;
 import de.obey.crown.core.handler.LocationHandler;
@@ -35,7 +35,7 @@ public class Teleporter {
     private Messanger messanger;
 
     public void initialize() {
-        crownConfig = Init.getInstance().getCrownConfig();
+        crownConfig = CrownCore.getInstance().getCrownConfig();
         messanger = crownConfig.getMessanger();
     }
 
@@ -43,11 +43,13 @@ public class Teleporter {
         final Location location = LocationHandler.getLocation(locationName);
         if (location == null) {
             messanger.sendMessage(player, "location-invalid", new String[]{"name"}, locationName);
+            player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 3f);
             return;
         }
 
         player.teleport(location);
-        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.5f, 3f);
+        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_TELEPORT, 0.5f, 3f);
     }
 
     public void teleportInstant(final Player player, final Location location) {
@@ -56,13 +58,15 @@ public class Teleporter {
         }
 
         player.teleport(location);
-        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.5f, 3f);
+        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_TELEPORT, 0.5f, 3f);
     }
 
     public void teleportWithAnimation(final Player player, final String locationName) {
         final Location location = LocationHandler.getLocation(locationName);
         if (location == null) {
             messanger.sendMessage(player, "location-invalid", new String[]{"name"}, locationName);
+            player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 3f);
             return;
         }
 
@@ -100,9 +104,9 @@ public class Teleporter {
         sendTeleportMessage(player, 0, cooldown, cooldown);
 
         isTeleporting.add(player.getUniqueId());
-        effect.run(Init.getInstance(), player, 1, null);
+        effect.run(CrownCore.getInstance(), player, 1, null);
 
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, 0.6f);
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 0.5f, 0.6f);
 
         new BukkitRunnable() {
 
@@ -118,7 +122,7 @@ public class Teleporter {
                 if (player.getLocation().getX() != saved.getX() || player.getLocation().getZ() != saved.getZ()) {
                     removeBossbar(player);
                     effect.stop();
-                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.4f, 0.4f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.2f, 3f);
                     messanger.sendMessage(player, "teleportation-cancelled");
                     isTeleporting.remove(player.getUniqueId());
                     cancel();
@@ -146,11 +150,11 @@ public class Teleporter {
                 }
 
                 pitch += 0.1f;
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f, pitch);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 0.5f, pitch);
 
                 ticks++;
             }
-        }.runTaskTimer(Init.getInstance(), 1, 1);
+        }.runTaskTimer(CrownCore.getInstance(), 1, 1);
     }
 
     private void removeBossbar(final Player player) {

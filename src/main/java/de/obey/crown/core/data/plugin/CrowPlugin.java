@@ -11,5 +11,4 @@ public interface CrowPlugin {
 
     void loadConfig();
     
-    void checkAuth();
 }
