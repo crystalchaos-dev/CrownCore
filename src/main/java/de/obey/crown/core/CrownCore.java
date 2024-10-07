@@ -5,7 +5,6 @@ import de.obey.crown.core.command.LocationCommand;
 import de.obey.crown.core.event.CoreStartEvent;
 import de.obey.crown.core.handler.LocationHandler;
 import de.obey.crown.core.listener.PlayerChat;
-import de.obey.crown.core.listener.PlayerDeath;
 import de.obey.crown.core.listener.PlayerLogin;
 import de.obey.crown.core.util.FileUtil;
 import de.obey.crown.core.util.Teleporter;
@@ -90,7 +89,6 @@ public final class CrownCore extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvents(new PlayerLogin(this), this);
-        pluginManager.registerEvents(new PlayerDeath(crownConfig), this);
         pluginManager.registerEvents(new PlayerChat(crownConfig), this);
     }
 

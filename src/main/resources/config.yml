@@ -11,12 +11,6 @@ teleport-delay: 5
 # also players in gmc will always be teleported without the animation
 instant-teleport: false
 
-# set this to false if you don't want the player do be respawned instantly
-instant-respawn: true
-
-# set this to true if you want the player to be teleported to spawn when joining
-teleport-to-spawn-on-join: false
-
 # players in this worlds will be teleported without a delay
 # this is casesensitive
 instant-teleport-worlds: [ ]
