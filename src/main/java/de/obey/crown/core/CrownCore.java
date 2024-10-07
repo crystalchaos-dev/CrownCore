@@ -25,7 +25,7 @@ public final class CrownCore extends JavaPlugin {
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
-    private boolean coreStarted = false;
+    private boolean coreStarted = false, placeholderapi = false;
 
     private Config crownConfig;
 
@@ -35,11 +35,8 @@ public final class CrownCore extends JavaPlugin {
         if (!getDataFolder().exists())
             getDataFolder().mkdir();
 
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null)
+            placeholderapi = true;
 
         // generate core message file with default messages
         FileUtil.getGeneratedCoreFile("messages.yml", true);

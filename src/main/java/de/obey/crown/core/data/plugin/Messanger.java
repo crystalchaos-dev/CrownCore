@@ -36,6 +36,8 @@ public final class Messanger {
     private final String doing = "https://dsc.gg/crownplugins";
 
     private final CrownCore crownCore = CrownCore.getInstance();
+    private final boolean placeholderapi = crownCore.isPlaceholderapi();
+
     @NonNull
     private final Plugin plugin;
 
@@ -96,7 +98,7 @@ public final class Messanger {
         String send = message;
 
         if (sender instanceof Player player)
-            send = PlaceholderAPI.setPlaceholders(player, send);
+            send = placeholderapi ? PlaceholderAPI.setPlaceholders(player, send) : send;
 
         sender.sendMessage(TextUtil.translateColors(send));
     }
@@ -120,7 +122,7 @@ public final class Messanger {
     }
 
     public void broadcastMessagewithPlaceholderAPI(final Player player, final String key, final String[] placeholders, final String... replacements) {
-        String message = PlaceholderAPI.setPlaceholders(player, getMessage(key));
+        String message = placeholderapi ? PlaceholderAPI.setPlaceholders(player, getMessage(key)) : getMessage(key);
         if (message.isEmpty())
             return;
 

@@ -3,6 +3,7 @@
 
 package de.obey.crown.core.util;
 
+import de.obey.crown.core.CrownCore;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.milkbowl.vault.economy.Economy;
@@ -17,7 +18,7 @@ public final class VaultHook {
     public Economy economy;
 
     static {
-        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+        if (CrownCore.getInstance().getServer().getPluginManager().getPlugin("Vault") != null) {
             setupEconomy();
         }
     }
