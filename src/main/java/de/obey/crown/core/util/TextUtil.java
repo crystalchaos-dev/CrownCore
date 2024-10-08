@@ -33,6 +33,7 @@ public final class TextUtil {
 
     @Getter
     private final Map<String, String> placeholders = Maps.newConcurrentMap();
+
     /* Hex Pattern */
     private final Pattern HEX_PATTERN = Pattern.compile("#[A-Fa-f0-9]{6}");
 
@@ -224,7 +225,7 @@ public final class TextUtil {
         return message;
     }
 
-    public String translateGradient(String text) {// Regular expression to match the gradient format
+    public String translateGradient(String text) {
         final String gradientPattern = "<#([0-9a-fA-F]{6}):#([0-9a-fA-F]{6}):([^>]+)>";
         final Pattern pattern = Pattern.compile(gradientPattern);
         final Matcher matcher = pattern.matcher(text);
@@ -234,32 +235,23 @@ public final class TextUtil {
             final Color startColor = Color.fromRGB(Integer.parseInt(matcher.group(1), 16));
             final Color endColor = Color.fromRGB(Integer.parseInt(matcher.group(2), 16));
 
-
             final String translateText = matcher.group(3);
 
-            // Calculate the gradient step
             int step = (endColor.getRed() - startColor.getRed()) / translateText.length();
 
-            // Translate each character in the text
             for (int i = 0; i < translateText.length(); i++) {
-
-                // Calculate the current color
 
                 int red = startColor.getRed() + (step * i);
                 int green = startColor.getGreen() + (step * i);
                 int blue = startColor.getBlue() + (step * i);
 
-
-                // Create a ChatColor object for the current color
                 final String hexColor = String.format("#%02x%02x%02x", red, green, blue);
                 ChatColor color = ChatColor.of(hexColor);
 
-                // Append the translated character to the StringBuilder
                 translatedText.append(color).append(translateText.charAt(i));
             }
         }
 
-        // Return the translated text
         return translatedText.toString();
     }
 

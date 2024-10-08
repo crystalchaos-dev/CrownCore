@@ -168,6 +168,21 @@ public final class Messanger {
         accentColor = TextUtil.registerCorePlaceholder("%accent%", FileUtil.getString(configuration, "accentColor", "&5"));
     }
 
+    public void loadPluginPlaceholders(final Plugin plugin) {
+        final File pluginFile = FileUtil.getCreatedFile(plugin, "messages.yml", true);
+        final YamlConfiguration pluginConfiguration = YamlConfiguration.loadConfiguration(pluginFile);
+
+        if (pluginConfiguration.contains("prefix"))
+            prefix = TextUtil.registerCorePlaceholder("%" + plugin.getName().toLowerCase() + "_prefix%", FileUtil.getString(pluginConfiguration, "prefix", "&5&lOBEY &8●&f"));
+
+        if (pluginConfiguration.contains("whiteColor"))
+            whiteColor = TextUtil.registerCorePlaceholder("%" + plugin.getName().toLowerCase() + "_white%", FileUtil.getString(pluginConfiguration, "whiteColor", "&f"));
+
+        if (pluginConfiguration.contains("accentColor"))
+            accentColor = TextUtil.registerCorePlaceholder("%" + plugin.getName().toLowerCase() + "_accent%", FileUtil.getString(pluginConfiguration, "accentColor", "&5"));
+
+    }
+
     private void loadDefaultMessages() {
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(FileUtil.getCoreFile("messages.yml"));
 

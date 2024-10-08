@@ -57,6 +57,7 @@ public class CrownConfig implements CrowPlugin {
 
     @Override
     public void loadMessages() {
+        messanger.loadPluginPlaceholders(plugin);
         messanger.loadMessages();
     }
 
