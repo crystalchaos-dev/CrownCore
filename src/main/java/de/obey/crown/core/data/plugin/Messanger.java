@@ -50,7 +50,7 @@ public final class Messanger {
             final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
             final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
-            configuration.set(key, "");
+            configuration.set("messages." + key, "");
 
             FileUtil.saveConfigurationIntoFile(configuration, file);
             return "";
@@ -188,7 +188,7 @@ public final class Messanger {
 
         if (!configuration.contains("messages"))
             return;
-        
+
         for (final String key : configuration.getConfigurationSection("messages").getKeys(false)) {
             messages.put(key, TextUtil.translateColors(configuration.getString("messages." + key)));
         }
