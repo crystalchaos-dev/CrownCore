@@ -41,9 +41,7 @@ public final class Config extends CrownConfig {
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         setTeleportMessageType(FileUtil.getString(configuration, "teleport-message-type", "actionbar").equalsIgnoreCase("actionbar") ? TeleportMessageType.ACTIONBAR : TeleportMessageType.BOSSBAR);
-        setInstantRespawn(FileUtil.getBoolean(configuration, "instant-respawn", true));
         setInstantTeleport(FileUtil.getBoolean(configuration, "instant-teleport", false));
-        setTeleportOnJoin(FileUtil.getBoolean(configuration, "teleport-to-spawn-on-join", false));
         setTeleportDelay(FileUtil.getInt(configuration, "teleport-delay", 10));
         setInstantTeleportWorlds(FileUtil.getStringArrayList(configuration, "instant-teleport-worlds", new ArrayList<>()));
         setMessageDelay(FileUtil.getInt(configuration, "message-cooldown", 0));

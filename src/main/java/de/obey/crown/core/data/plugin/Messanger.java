@@ -186,6 +186,9 @@ public final class Messanger {
     private void loadDefaultMessages() {
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(FileUtil.getCoreFile("messages.yml"));
 
+        if (!configuration.contains("messages"))
+            return;
+        
         for (final String key : configuration.getConfigurationSection("messages").getKeys(false)) {
             messages.put(key, TextUtil.translateColors(configuration.getString("messages." + key)));
         }

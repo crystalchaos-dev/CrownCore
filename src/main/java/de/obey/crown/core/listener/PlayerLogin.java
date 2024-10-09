@@ -26,7 +26,7 @@ public final class PlayerLogin implements Listener {
     public void on(final AsyncPlayerPreLoginEvent event) {
         if (!crownCore.isCoreStarted()) {
 
-            event.setKickMessage(crownCore.getCrownConfig().getMessanger().getMessage("kick-server-starting"));
+            event.setKickMessage("§c§oꜱᴇʀᴠᴇʀ ɪꜱ ꜱᴛᴀʀᴛɪɴɢ.");
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
         }
     }
