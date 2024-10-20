@@ -65,3 +65,11 @@ processResources {
         expand props
     }
 }
+
+jar {
+    // Set the name of the jar file
+    archiveFileName = "CrownCore.jar"
+
+    // Optionally, you can include the version in the name:
+    // archiveFileName = "my-custom-jar-name-${version}.jar"
+}

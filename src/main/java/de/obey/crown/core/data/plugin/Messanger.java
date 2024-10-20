@@ -388,14 +388,6 @@ public final class Messanger {
         }
     }
 
-    public double isValidDouble(final String input) {
-        try {
-            return Double.parseDouble(input);
-        } catch (final NumberFormatException exception) {
-            return -1D;
-        }
-    }
-
     public int isValidInt(final CommandSender sender, final String input) {
         final int number = isValidInt(input);
 
@@ -406,8 +398,16 @@ public final class Messanger {
         return number;
     }
 
+    public double isValidDouble(final String input) {
+        try {
+            return Double.parseDouble(input);
+        } catch (final NumberFormatException exception) {
+            return -1D;
+        }
+    }
+
     public double isValidDouble(final CommandSender sender, final String input) {
-        final double number = isValidInt(input);
+        final double number = isValidDouble(input);
 
         if (number < 0) {
             sendMessage(sender, "invalid-number");

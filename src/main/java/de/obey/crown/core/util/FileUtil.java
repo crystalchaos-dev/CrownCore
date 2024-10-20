@@ -167,6 +167,12 @@ public final class FileUtil {
 
         final ArrayList<ItemStack> items = new ArrayList<>();
 
+        if (!configuration.contains(path))
+            return items;
+
+        if (configuration.getConfigurationSection(path).getKeys(false).isEmpty())
+            return items;
+
         for (final String key : configuration.getConfigurationSection(path).getKeys(false)) {
             items.add(configuration.getItemStack(path + "." + key));
         }
