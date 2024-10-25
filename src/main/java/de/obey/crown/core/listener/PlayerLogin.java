@@ -25,7 +25,6 @@ public final class PlayerLogin implements Listener {
     @EventHandler
     public void on(final AsyncPlayerPreLoginEvent event) {
         if (!crownCore.isCoreStarted()) {
-
             event.setKickMessage("§c§oꜱᴇʀᴠᴇʀ ɪꜱ ꜱᴛᴀʀᴛɪɴɢ.");
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
         }

@@ -68,7 +68,7 @@ public final class TextUtil {
     }
 
     public String formatTimeString(long millis) {
-        int hours = 0, minutes = 0, seconds = 0;
+        int days = 0, hours = 0, minutes = 0, seconds = 0;
 
         while (millis >= 1000) {
             seconds++;
@@ -85,7 +85,38 @@ public final class TextUtil {
             minutes -= 60;
         }
 
-        return (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "." + (millis / 100) + "s" : "0." + (millis / 100) + "s");
+        while (hours >= 24) {
+            days++;
+            hours -= 24;
+        }
+
+        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "." + (millis / 100) + "s" : "0." + (millis / 100) + "s");
+    }
+
+    public String formatTimeStringNoSeconds(long millis) {
+        int days = 0, hours = 0, minutes = 0, seconds = 0;
+
+        while (millis >= 1000) {
+            seconds++;
+            millis -= 1000;
+        }
+
+        while (seconds >= 60) {
+            minutes++;
+            seconds -= 60;
+        }
+
+        while (minutes >= 60) {
+            hours++;
+            minutes -= 60;
+        }
+
+        while (hours >= 24) {
+            days++;
+            hours -= 24;
+        }
+
+        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "");
     }
 
     final DecimalFormat decimalFormat = new DecimalFormat("#,###.##", new DecimalFormatSymbols(Locale.ENGLISH));
@@ -99,10 +130,10 @@ public final class TextUtil {
     }
 
     public String formatNumberShort(final double value) {
-        String edited = decimalFormat.format(value);
+        String edited = formatNumber((int) value);
 
         if (value <= 999)
-            return "" + value;
+            return edited;
 
         // 1,001,001,100,000,000
 
@@ -134,7 +165,7 @@ public final class TextUtil {
             edited = value + "";
         }
 
-        return edited.replace(",00", "");
+        return edited;
     }
 
     public double getDoubleFromStringwithSuffix(String text) {

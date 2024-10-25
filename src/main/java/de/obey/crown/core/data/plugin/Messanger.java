@@ -93,6 +93,41 @@ public final class Messanger {
         return TextUtil.translateColors(message);
     }
 
+    public String getMessageWithPlaceholderAPI(final Player player, final String key, final String[] placeholders, final String... replacements) {
+        if (!messages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            String value = "";
+
+            for (String placeholder : placeholders) {
+                value = value + "%" + placeholder + "%";
+            }
+
+            configuration.set("messages." + key, value);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return value;
+        }
+
+        if (messages.get(key).equalsIgnoreCase(""))
+            return "";
+
+        String message = messages.get(key);
+
+        int count = 0;
+        for (final String placeholder : placeholders) {
+            message = message.replace("%" + placeholder + "%", replacements[count]);
+            count++;
+        }
+
+        if (placeholderapi)
+            message = PlaceholderAPI.setPlaceholders(player, message);
+
+        return TextUtil.translateColors(message);
+    }
+
+
     public void sendNonConfigMessage(final CommandSender sender, final String message) {
 
         String send = message;
