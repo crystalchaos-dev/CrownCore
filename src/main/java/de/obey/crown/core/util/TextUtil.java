@@ -119,6 +119,32 @@ public final class TextUtil {
         return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "");
     }
 
+    public String formatTimeStringNoMilliSeconds(long millis) {
+        int days = 0, hours = 0, minutes = 0, seconds = 0;
+
+        while (millis >= 1000) {
+            seconds++;
+            millis -= 1000;
+        }
+
+        while (seconds >= 60) {
+            minutes++;
+            seconds -= 60;
+        }
+
+        while (minutes >= 60) {
+            hours++;
+            minutes -= 60;
+        }
+
+        while (hours >= 24) {
+            days++;
+            hours -= 24;
+        }
+
+        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "");
+    }
+
     final DecimalFormat decimalFormat = new DecimalFormat("#,###.##", new DecimalFormatSymbols(Locale.ENGLISH));
 
     public String formatNumber(final long value) {

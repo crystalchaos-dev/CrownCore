@@ -23,6 +23,13 @@ public final class VaultHook {
         }
     }
 
+    private void setupEconomy() {
+        final RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
+
+        if (rsp != null)
+            economy = rsp.getProvider();
+    }
+
     public double get(final OfflinePlayer player) {
         if (economy == null || !economy.isEnabled()) {
             return 0;
@@ -49,12 +56,5 @@ public final class VaultHook {
             return;
         }
         economy.withdrawPlayer(player, amount);
-    }
-
-    private void setupEconomy() {
-        final RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
-
-        if (rsp != null)
-            economy = rsp.getProvider();
     }
 }
