@@ -146,6 +146,25 @@ public final class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder addLore(final List<String> lore) {
+        final List<String> list = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
+
+        list.addAll(lore);
+
+        meta.setLore(list);
+
+        if (fireworkMeta != null)
+            fireworkMeta.setLore(list);
+
+        if (skullMeta != null)
+            skullMeta.setLore(list);
+
+        if (leatherMeta != null)
+            leatherMeta.setLore(list);
+
+        return this;
+    }
+
     public ItemBuilder setFireWorkColor(final Color color) {
         final FireworkEffect effect = FireworkEffect.builder().withColor(color).build();
 
