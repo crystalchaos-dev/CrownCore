@@ -39,7 +39,7 @@ public abstract class CrownDataService<E> {
     public CompletableFuture<E> loadAsyncNoCaching(final UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
 
-            if(cache.containsKey(uuid))
+            if (cache.containsKey(uuid))
                 return cache.get(uuid);
 
             return loadNoCache(uuid);

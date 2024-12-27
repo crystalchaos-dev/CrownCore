@@ -419,7 +419,7 @@ public final class Messanger {
         try {
             return Integer.parseInt(input);
         } catch (final NumberFormatException exception) {
-            return -1;
+            return -2;
         }
     }
 
@@ -427,6 +427,16 @@ public final class Messanger {
         final int number = isValidInt(input);
 
         if (number < 0) {
+            sendMessage(sender, "invalid-number");
+        }
+
+        return number;
+    }
+
+    public int isValidIntAllowMinusOne(final CommandSender sender, final String input) {
+        final int number = isValidInt(input);
+
+        if (number < -1) {
             sendMessage(sender, "invalid-number");
         }
 

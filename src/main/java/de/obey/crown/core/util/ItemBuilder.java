@@ -279,6 +279,12 @@ public final class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setCustomModelData(final int data) {
+        meta.setCustomModelData(data);
+
+        return this;
+    }
+
     public ItemStack build() {
         itemStack.setItemMeta(meta);
 
