@@ -35,8 +35,6 @@ public final class TextUtil {
     private final Map<String, String> placeholders = Maps.newConcurrentMap();
 
     /* Hex Pattern */
-    private final Pattern HEX_PATTERN = Pattern.compile("#[A-Fa-f0-9]{6}");
-
     public boolean containsOnlyLettersAndNumbers(final String input) {
         return input.matches("\\w+");
     }
@@ -243,16 +241,26 @@ public final class TextUtil {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(translateColors(message)));
     }
 
+    private final Pattern HEX_PATTERN = Pattern.compile("#[A-Fa-f0-9]{6}");
+    private final Pattern HEX_PATTERN_TWO = Pattern.compile("&#[A-Fa-f0-9]{6}");
+
     public String translateHexColors(String message) {
         if (message == null)
             return "";
+
+        Matcher matcherTWO = HEX_PATTERN_TWO.matcher(message);
+
+        while (matcherTWO.find()) {
+            final String code = message.substring(matcherTWO.start(), matcherTWO.end());
+            message = message.replace(code, "" + ChatColor.of(code));
+            matcherTWO = HEX_PATTERN_TWO.matcher(message);
+        }
 
         Matcher matcher = HEX_PATTERN.matcher(message);
 
         while (matcher.find()) {
             final String code = message.substring(matcher.start(), matcher.end());
             message = message.replace(code, "" + ChatColor.of(code));
-            // message = message.replace(code, "" + TextColor.fromHexString(code));
             matcher = HEX_PATTERN.matcher(message);
         }
 

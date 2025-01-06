@@ -115,11 +115,73 @@ public final class Messanger {
 
         String message = messages.get(key);
 
-        int count = 0;
-        for (final String placeholder : placeholders) {
-            message = message.replace("%" + placeholder + "%", replacements[count]);
-            count++;
+        if (placeholders.length > 0) {
+            int count = 0;
+            for (final String placeholder : placeholders) {
+                message = message.replace("%" + placeholder + "%", replacements[count]);
+                count++;
+            }
         }
+
+        if (placeholderapi)
+            message = PlaceholderAPI.setPlaceholders(player, message);
+
+        return TextUtil.translateColors(message);
+    }
+
+    public String getMessageWithPlaceholderAPI(final OfflinePlayer player, final String key, final String[] placeholders, final String... replacements) {
+        if (!messages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            String value = "";
+
+            for (String placeholder : placeholders) {
+                value = value + "%" + placeholder + "%";
+            }
+
+            configuration.set("messages." + key, value);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return value;
+        }
+
+        if (messages.get(key).equalsIgnoreCase(""))
+            return "";
+
+        String message = messages.get(key);
+
+        if (placeholders.length > 0) {
+            int count = 0;
+            for (final String placeholder : placeholders) {
+                message = message.replace("%" + placeholder + "%", replacements[count]);
+                count++;
+            }
+        }
+
+        if (placeholderapi)
+            message = PlaceholderAPI.setPlaceholders(player, message);
+
+        return TextUtil.translateColors(message);
+    }
+
+    public String getMessageWithPlaceholderAPI(final OfflinePlayer player, final String key) {
+        if (!messages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            String value = "";
+
+            configuration.set("messages." + key, value);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return value;
+        }
+
+        if (messages.get(key).equalsIgnoreCase(""))
+            return "";
+
+        String message = messages.get(key);
 
         if (placeholderapi)
             message = PlaceholderAPI.setPlaceholders(player, message);
@@ -147,7 +209,8 @@ public final class Messanger {
         sender.sendMessage(TextUtil.translateCorePlaceholder(message));
     }
 
-    public void sendMessage(final CommandSender sender, final String key, final String[] placeholders, final String... replacements) {
+    public void sendMessage(final CommandSender sender, final String key, final String[] placeholders,
+                            final String... replacements) {
         String message = getMessage(key, placeholders, replacements);
 
         if (message.isEmpty())
@@ -156,7 +219,8 @@ public final class Messanger {
         sender.sendMessage(TextUtil.translateCorePlaceholder(message));
     }
 
-    public void broadcastMessagewithPlaceholderAPI(final Player player, final String key, final String[] placeholders, final String... replacements) {
+    public void broadcastMessagewithPlaceholderAPI(final Player player, final String key,
+                                                   final String[] placeholders, final String... replacements) {
         String message = placeholderapi ? PlaceholderAPI.setPlaceholders(player, getMessage(key)) : getMessage(key);
         if (message.isEmpty())
             return;
@@ -257,7 +321,8 @@ public final class Messanger {
         return temp;
     }
 
-    public ArrayList<String> getMultiLineMessage(final String key, final String[] placeholders, final String... replacements) {
+    public ArrayList<String> getMultiLineMessage(final String key, final String[] placeholders, final String...
+            replacements) {
         if (!multiLineMessages.containsKey(key))
             return new ArrayList<>();
 
@@ -284,7 +349,7 @@ public final class Messanger {
             return;
 
         for (final String line : lines) {
-            sender.sendMessage(line);
+            sender.sendMessage(PlaceholderAPI.setPlaceholders(null, line));
         }
     }
 
@@ -294,11 +359,12 @@ public final class Messanger {
             return;
 
         for (final String line : lines) {
-            Bukkit.broadcastMessage(line);
+            Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(null, line));
         }
     }
 
-    public void sendMultiLineMessage(final CommandSender sender, final String key, final String[] placeholders, final String... replacements) {
+    public void sendMultiLineMessage(final CommandSender sender, final String key, final String[] placeholders,
+                                     final String... replacements) {
         final ArrayList<String> lines = getMultiLineMessage(key);
         if (lines.isEmpty())
             return;
@@ -316,11 +382,12 @@ public final class Messanger {
         }
 
         for (final String translatedLine : temp) {
-            sender.sendMessage(translatedLine);
+            sender.sendMessage(PlaceholderAPI.setPlaceholders(null, translatedLine));
         }
     }
 
-    public void broadcastMultiLineMessage(final String key, final String[] placeholders, final String... replacements) {
+    public void broadcastMultiLineMessage(final String key, final String[] placeholders, final String...
+            replacements) {
         final ArrayList<String> lines = getMultiLineMessage(key);
         if (lines.isEmpty())
             return;
@@ -338,7 +405,7 @@ public final class Messanger {
         }
 
         for (final String translatedLine : temp) {
-            Bukkit.broadcastMessage(translatedLine);
+            Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(null, translatedLine));
         }
     }
 

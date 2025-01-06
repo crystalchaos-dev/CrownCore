@@ -303,7 +303,7 @@ public final class ItemBuilder {
 
         return this;
     }
-
+    
     public ItemStack build() {
         itemStack.setItemMeta(meta);
 
