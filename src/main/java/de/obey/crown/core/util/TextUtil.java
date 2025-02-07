@@ -252,7 +252,7 @@ public final class TextUtil {
 
         while (matcherTWO.find()) {
             final String code = message.substring(matcherTWO.start(), matcherTWO.end());
-            message = message.replace(code, "" + ChatColor.of(code));
+            message = message.replace(code, "" + ChatColor.of(code.substring(1)));
             matcherTWO = HEX_PATTERN_TWO.matcher(message);
         }
 
@@ -265,6 +265,57 @@ public final class TextUtil {
         }
 
         return message;
+    }
+
+    public TextComponent translateComponent(String message) {
+        Bukkit.getLogger().info(message);
+
+        message = ChatColor.translateAlternateColorCodes('&', message);
+
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        final TextComponent mainComponent = new TextComponent();
+        int lastIndex = 0;
+
+        while (matcher.find()) {
+            if (matcher.start() > lastIndex) {
+                mainComponent.addExtra(new TextComponent(message.substring(lastIndex, matcher.start())));
+            }
+
+            String hexColor = matcher.group(0);
+            net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hexColor);
+
+            Bukkit.getLogger().info(hexColor + " - " + color.getName());
+
+            int textStart = matcher.end();
+            int nextColorStart = textStart;
+
+            while (nextColorStart < message.length()) {
+                Matcher nextMatcher = HEX_PATTERN.matcher(message.substring(nextColorStart));
+                if (nextMatcher.lookingAt()) {
+                    break;
+                }
+
+                nextColorStart++;
+            }
+
+            String coloredText = message.substring(textStart, nextColorStart);
+
+            Bukkit.getLogger().info(coloredText);
+
+            if (!coloredText.isEmpty()) {
+                TextComponent colorComponent = new TextComponent(coloredText);
+                colorComponent.setColor(color);
+                mainComponent.addExtra(colorComponent);
+            }
+
+            lastIndex = nextColorStart;
+        }
+
+        if (lastIndex < message.length()) {
+            mainComponent.addExtra(new TextComponent(message.substring(lastIndex)));
+        }
+
+        return mainComponent;
     }
 
     public String translateLegacyColors(String message) {

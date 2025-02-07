@@ -43,6 +43,7 @@ public final class Messanger {
 
     private String prefix, whiteColor, accentColor;
     private final Map<String, String> messages = Maps.newConcurrentMap();
+    private final Map<String, String> rawMessages = Maps.newConcurrentMap();
     private final Map<String, ArrayList<String>> multiLineMessages = Maps.newConcurrentMap();
 
     public String getMessage(final String key) {
@@ -60,6 +61,54 @@ public final class Messanger {
             return "";
 
         return TextUtil.translateCorePlaceholder(messages.get(key));
+    }
+
+    public String getRawMessage(final String key) {
+        if (!rawMessages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            configuration.set("messages." + key, "");
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return "";
+        }
+
+        if (rawMessages.get(key).equalsIgnoreCase(""))
+            return "";
+
+        return TextUtil.translateCorePlaceholder(rawMessages.get(key));
+    }
+
+    public String getRawMessage(final String key, final String[] placeholders, final String... replacements) {
+        if (!rawMessages.containsKey(key)) {
+            final File file = FileUtil.getGeneratedFile(plugin, "messages.yml", true);
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            String value = "";
+
+            for (String placeholder : placeholders) {
+                value = value + "%" + placeholder + "%";
+            }
+
+            configuration.set("messages." + key, value);
+
+            FileUtil.saveConfigurationIntoFile(configuration, file);
+            return value;
+        }
+
+        if (rawMessages.get(key).equalsIgnoreCase(""))
+            return "";
+
+        String message = rawMessages.get(key);
+
+        int count = 0;
+        for (final String placeholder : placeholders) {
+            message = message.replace("%" + placeholder + "%", replacements[count]);
+            count++;
+        }
+
+        return message;
     }
 
     public String getMessage(final String key, final String[] placeholders, final String... replacements) {
@@ -289,7 +338,9 @@ public final class Messanger {
             return;
 
         for (final String key : configuration.getConfigurationSection("messages").getKeys(false)) {
-            messages.put(key, TextUtil.translateColors(configuration.getString("messages." + key)));
+            final String value = configuration.getString("messages." + key);
+            messages.put(key, TextUtil.translateColors(value));
+            rawMessages.put(key, value);
         }
     }
 
@@ -302,7 +353,9 @@ public final class Messanger {
 
         if (configuration.contains("messages")) {
             for (final String key : configuration.getConfigurationSection("messages").getKeys(false)) {
-                messages.put(key, TextUtil.translateColors(configuration.getString("messages." + key)));
+                final String value = configuration.getString("messages." + key);
+                messages.put(key, TextUtil.translateColors(value));
+                rawMessages.put(key, value);
             }
         }
     }

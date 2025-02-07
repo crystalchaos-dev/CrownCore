@@ -21,11 +21,11 @@ version = '1.0.0'
 repositories {
     mavenCentral()
     mavenLocal()
-    maven { url = "https://repo.panda-lang.org/releases" }
+    maven { url "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
 
-    maven {
-        url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
-    }
+    maven { url "https://jitpack.io" }
+
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
 }
 
 dependencies {
