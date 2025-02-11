@@ -42,8 +42,9 @@ public final class CrownCore extends JavaPlugin {
         FileUtil.getGeneratedCoreFile("config.yml", true);
 
         crownConfig = new Config(this);
-        load();
+        new Placeholders().register();
 
+        load();
 
         final AtomicInteger counter = new AtomicInteger();
         Bukkit.getScheduler().runTaskTimer(this, (runnable) -> {
