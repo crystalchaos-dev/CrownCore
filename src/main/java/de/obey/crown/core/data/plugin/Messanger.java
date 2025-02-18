@@ -412,12 +412,13 @@ public final class Messanger {
             return;
 
         for (final String line : lines) {
-            Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(null, line));
+            Bukkit.broadcastMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, line)));
         }
     }
 
     public void sendMultiLineMessage(final CommandSender sender, final String key, final String[] placeholders,
                                      final String... replacements) {
+
         final ArrayList<String> lines = getMultiLineMessage(key);
         if (lines.isEmpty())
             return;
@@ -458,7 +459,7 @@ public final class Messanger {
         }
 
         for (final String translatedLine : temp) {
-            Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(null, translatedLine));
+            Bukkit.broadcastMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, translatedLine)));
         }
     }
 
