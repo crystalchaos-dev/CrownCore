@@ -4,8 +4,10 @@
 package de.obey.crown.core.util;
 
 import com.google.common.collect.Maps;
+import de.obey.crown.core.CrownCore;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -339,6 +341,13 @@ public final class TextUtil {
         }
 
         return message;
+    }
+
+    public String translatePlaceholders(final Player player, final String message) {
+        if (!CrownCore.getInstance().isPlaceholderapi())
+            return message;
+
+        return PlaceholderAPI.setPlaceholders(player, message);
     }
 
     public String translateGradient(String text) {

@@ -108,7 +108,7 @@ public final class Messanger {
             count++;
         }
 
-        return message;
+        return TextUtil.translateCorePlaceholder(message);
     }
 
     public String getMessage(final String key, final String[] placeholders, final String... replacements) {

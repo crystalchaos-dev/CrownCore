@@ -35,8 +35,10 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        if (!messanger.hasPermission(sender, "command.core"))
+        if (args.length == 0) {
+            messanger.sendNonConfigMessage(sender, "%prefix% Running %accent%CrownCore %white%version %accent%&o" + CrownCore.getInstance().getDescription().getVersion() + "%white% by %accent%@Obeeyyyy%white%.");
             return false;
+        }
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
@@ -54,7 +56,7 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
             if (args[0].equalsIgnoreCase("reloadmessages")) {
                 if (!messanger.hasPermission(sender, "command.core.reload"))
                     return false;
-                
+
                 messanger.loadCorePlaceholders();
                 config.loadMessages();
                 messanger.sendMessage(sender, "messages-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
@@ -88,10 +90,6 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
 
         if (!(sender instanceof Player player))
             return list;
-
-        if (!sender.hasPermission("command.core")) {
-            return list;
-        }
 
         if (args.length == 1) {
             if (sender.hasPermission("command.core.reload")) {

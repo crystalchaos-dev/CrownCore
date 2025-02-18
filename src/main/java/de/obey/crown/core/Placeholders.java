@@ -37,6 +37,12 @@ public final class Placeholders extends PlaceholderExpansion {
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("prefix"))
                 return TextUtil.translateCorePlaceholder("%prefix%");
+
+            if (args[0].equalsIgnoreCase("accent"))
+                return TextUtil.translateCorePlaceholder("%accent%");
+
+            if (args[0].equalsIgnoreCase("white"))
+                return TextUtil.translateCorePlaceholder("%white%");
         }
 
         return null;
