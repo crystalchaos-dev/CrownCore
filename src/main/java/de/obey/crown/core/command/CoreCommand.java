@@ -12,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -40,45 +39,41 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
+        if (!messanger.hasPermission(sender, "command.core.reload"))
+            return false;
+
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                if (!messanger.hasPermission(sender, "command.core.reload"))
-                    return false;
-
                 config.loadMessages();
                 config.loadConfig();
                 messanger.loadCorePlaceholders();
                 messanger.sendMessage(sender, "plugin-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
-
                 return false;
             }
+        }
 
-            if (args[0].equalsIgnoreCase("reloadmessages")) {
-                if (!messanger.hasPermission(sender, "command.core.reload"))
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("reload")) {
+                if (args[1].equalsIgnoreCase("messages")) {
+                    messanger.loadCorePlaceholders();
+                    config.loadMessages();
+                    messanger.sendMessage(sender, "messages-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
+
                     return false;
+                }
 
-                messanger.loadCorePlaceholders();
-                config.loadMessages();
-                messanger.sendMessage(sender, "messages-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
+                if (args[1].equalsIgnoreCase("config")) {
+                    config.loadConfig();
+                    messanger.sendMessage(sender, "config-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
 
-                return false;
-            }
-
-            if (args[0].equalsIgnoreCase("reloadconfig")) {
-                if (!messanger.hasPermission(sender, "command.core.reload"))
                     return false;
-
-                config.loadConfig();
-                messanger.sendMessage(sender, "config-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
-
-                return false;
+                }
             }
         }
 
         messanger.sendCommandSyntax(sender, "/core",
                 "/core reload : Reloads config and messages.",
-                "/core reloadmessages : Reloads messages.",
-                "/core reloadconfig : Reloads config.");
+                "/core reload <config/messages> : Reloads config or messages.");
 
         return false;
     }
@@ -88,16 +83,18 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
 
         final ArrayList<String> list = new ArrayList<>();
 
-        if (!(sender instanceof Player player))
+        if (!sender.hasPermission("command.core.reload"))
             return list;
 
         if (args.length == 1) {
-            if (sender.hasPermission("command.core.reload")) {
-                list.add("reload");
-                list.add("reloadmessages");
-                list.add("reloadconfig");
-            }
+            list.add("reload");
         }
+
+        if (args.length == 2) {
+            list.add("config");
+            list.add("messages");
+        }
+
 
         final String argument = args[args.length - 1];
         if (!argument.isEmpty())
