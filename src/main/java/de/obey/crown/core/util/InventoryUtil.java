@@ -3,12 +3,14 @@
 
 package de.obey.crown.core.util;
 
+import de.obey.crown.core.CrownCore;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 @UtilityClass
 public final class InventoryUtil {
@@ -71,7 +73,12 @@ public final class InventoryUtil {
 
     public void addItemToPlayer(final Player player, final ItemStack item) {
         if (player.getInventory().firstEmpty() == -1) {
-            player.getWorld().dropItem(player.getLocation(), item.clone());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.getWorld().dropItem(player.getLocation(), item.clone());
+                }
+            }.runTask(CrownCore.getInstance());
             return;
         }
 

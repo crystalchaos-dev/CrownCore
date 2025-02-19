@@ -295,7 +295,7 @@ public final class Messanger {
             count++;
         }
 
-        Bukkit.broadcastMessage(message);
+        Bukkit.broadcastMessage(TextUtil.translateColors(message));
     }
 
     public void broadcastMessage(final String key) {

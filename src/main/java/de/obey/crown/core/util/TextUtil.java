@@ -286,8 +286,6 @@ public final class TextUtil {
             String hexColor = matcher.group(0);
             net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hexColor);
 
-            Bukkit.getLogger().info(hexColor + " - " + color.getName());
-
             int textStart = matcher.end();
             int nextColorStart = textStart;
 
@@ -301,8 +299,6 @@ public final class TextUtil {
             }
 
             String coloredText = message.substring(textStart, nextColorStart);
-
-            Bukkit.getLogger().info(coloredText);
 
             if (!coloredText.isEmpty()) {
                 TextComponent colorComponent = new TextComponent(coloredText);
