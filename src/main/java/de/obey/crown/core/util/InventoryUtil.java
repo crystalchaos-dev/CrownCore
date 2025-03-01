@@ -73,6 +73,11 @@ public final class InventoryUtil {
 
     public void addItemToPlayer(final Player player, final ItemStack item) {
         if (player.getInventory().firstEmpty() == -1) {
+            if (player.getInventory().getItemInOffHand().getType() == Material.AIR) {
+                player.getInventory().setItemInOffHand(item);
+                return;
+            }
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -90,6 +95,11 @@ public final class InventoryUtil {
         item.setAmount(amount);
 
         if (player.getInventory().firstEmpty() == -1) {
+            if (player.getInventory().getItemInOffHand().getType() == Material.AIR) {
+                player.getInventory().setItemInOffHand(item);
+                return;
+            }
+
             player.getWorld().dropItem(player.getLocation(), item.clone());
             return;
         }
