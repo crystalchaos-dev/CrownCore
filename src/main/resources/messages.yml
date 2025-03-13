@@ -22,4 +22,4 @@ messages:
   telportation-message: '%prefix% &fTeleporting in %accent%&o%remaining%%white%!'
   teleported-message: '%prefix% &fTeleportation complete.'
   teleportation-cancelled: '%prefix% &c&oTeleportation cancelled.'
-  balance-not-enough: "%prefix% You dont have enough money, you are missing %accent%%missing%%white%."
+  balance-not-enough: "%prefix% You dont have enough money, you are missing %accent%-$%missing%%white%."

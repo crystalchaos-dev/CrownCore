@@ -29,12 +29,6 @@ import java.util.Map;
 @Setter
 public final class Messanger {
 
-    private final String hi = "https://dsc.gg/crownplugins";
-    private final String how = "https://dsc.gg/crownplugins";
-    private final String are = "https://dsc.gg/crownplugins";
-    private final String you = "https://dsc.gg/crownplugins";
-    private final String doing = "https://dsc.gg/crownplugins";
-
     private final CrownCore crownCore = CrownCore.getInstance();
     private final boolean placeholderapi = crownCore.isPlaceholderapi();
 
@@ -77,7 +71,7 @@ public final class Messanger {
         if (rawMessages.get(key).equalsIgnoreCase(""))
             return "";
 
-        return TextUtil.translateCorePlaceholder(rawMessages.get(key));
+        return TextUtil.translateCorePlaceholderRaw(rawMessages.get(key));
     }
 
     public String getRawMessage(final String key, final String[] placeholders, final String... replacements) {
@@ -280,7 +274,12 @@ public final class Messanger {
             count++;
         }
 
-        Bukkit.broadcastMessage(TextUtil.translateColors(message));
+        message = TextUtil.translateColors(message);
+
+        Bukkit.getConsoleSender().sendMessage(message);
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            all.sendMessage(message);
+        }
     }
 
     public void broadcastMessage(final String key, final String[] placeholders, final String... replacements) {
@@ -295,7 +294,10 @@ public final class Messanger {
             count++;
         }
 
-        Bukkit.broadcastMessage(TextUtil.translateColors(message));
+        Bukkit.getConsoleSender().sendMessage(message);
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            all.sendMessage(message);
+        }
     }
 
     public void broadcastMessage(final String key) {
@@ -304,7 +306,13 @@ public final class Messanger {
         if (message.isEmpty())
             return;
 
-        Bukkit.broadcastMessage(message);
+        if (Bukkit.getOnlinePlayers().isEmpty())
+            return;
+
+        Bukkit.getConsoleSender().sendMessage(message);
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            all.sendMessage(message);
+        }
     }
 
     public void loadCorePlaceholders() {
@@ -411,8 +419,15 @@ public final class Messanger {
         if (lines.isEmpty())
             return;
 
+        if (Bukkit.getOnlinePlayers().isEmpty())
+            return;
+
+
         for (final String line : lines) {
-            Bukkit.broadcastMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, line)));
+            Bukkit.getConsoleSender().sendMessage(line);
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                all.sendMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, line)));
+            }
         }
     }
 
@@ -446,6 +461,10 @@ public final class Messanger {
         if (lines.isEmpty())
             return;
 
+        if (Bukkit.getOnlinePlayers().isEmpty())
+            return;
+
+
         final ArrayList<String> temp = new ArrayList<>();
 
         for (String line : lines) {
@@ -458,8 +477,12 @@ public final class Messanger {
             temp.add(line);
         }
 
+
         for (final String translatedLine : temp) {
-            Bukkit.broadcastMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, translatedLine)));
+            Bukkit.getConsoleSender().sendMessage(translatedLine);
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                all.sendMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, translatedLine)));
+            }
         }
     }
 

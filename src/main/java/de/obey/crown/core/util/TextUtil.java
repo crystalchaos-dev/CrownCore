@@ -35,6 +35,7 @@ public final class TextUtil {
 
     @Getter
     private final Map<String, String> placeholders = Maps.newConcurrentMap();
+    private final Map<String, String> rawPlaceholders = Maps.newConcurrentMap();
 
     /* Hex Pattern */
     public boolean containsOnlyLettersAndNumbers(final String input) {
@@ -270,8 +271,6 @@ public final class TextUtil {
     }
 
     public TextComponent translateComponent(String message) {
-        Bukkit.getLogger().info(message);
-
         message = ChatColor.translateAlternateColorCodes('&', message);
 
         Matcher matcher = HEX_PATTERN.matcher(message);
@@ -318,6 +317,25 @@ public final class TextUtil {
 
     public String translateLegacyColors(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public String translateCorePlaceholderRaw(String message) {
+        if (message == null)
+            return "";
+
+        if (message.isEmpty())
+            return message;
+
+        if (rawPlaceholders.isEmpty())
+            return message;
+
+        for (final String key : rawPlaceholders.keySet()) {
+            if (message.contains(key)) {
+                message = message.replace(key, rawPlaceholders.get(key));
+            }
+        }
+
+        return message;
     }
 
     public String translateCorePlaceholder(String message) {
@@ -381,6 +399,7 @@ public final class TextUtil {
     }
 
     public String registerCorePlaceholder(final String placeholder, String replacement) {
+        rawPlaceholders.put(placeholder, replacement);
         replacement = translateHexColors(translateLegacyColors(replacement));
         placeholders.put(placeholder, replacement);
         return replacement;
