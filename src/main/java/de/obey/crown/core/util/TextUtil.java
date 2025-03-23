@@ -42,7 +42,7 @@ public final class TextUtil {
         return input.matches("\\w+");
     }
 
-    private String reverse(final String text) {
+    public String reverse(final String text) {
         String value = "";
         for (int i = 0; i < text.length(); i++) {
             value = text.charAt(i) + value;
