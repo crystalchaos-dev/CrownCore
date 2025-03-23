@@ -23,3 +23,7 @@ command-cooldown: 0
 
 # cooldown before sending another chat message in milliseconds
 message-cooldown: 0
+
+# toggle the /store and /discord commands
+store-command: false
+discord-command: false

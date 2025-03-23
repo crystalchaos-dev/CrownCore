@@ -3,15 +3,17 @@
 
 package de.obey.crown.core.command;
 
-import de.obey.crown.core.Config;
 import de.obey.crown.core.CrownCore;
+import de.obey.crown.core.PluginConfig;
 import de.obey.crown.core.data.plugin.Messanger;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
     private final String doing = "https://dsc.gg/crownplugins";
 
     private final Messanger messanger;
-    private final Config config;
+    private final PluginConfig pluginConfig;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
@@ -39,13 +41,35 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("discord")) {
+
+                messanger.sendMultiLineMessage(sender, "discord-message");
+
+                if (sender instanceof Player player)
+                    player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.5f, 3f);
+
+                return false;
+            }
+
+            if (args[0].equalsIgnoreCase("store")) {
+
+                messanger.sendMultiLineMessage(sender, "store-message");
+
+                if (sender instanceof Player player)
+                    player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.5f, 3f);
+
+                return false;
+            }
+        }
+
         if (!messanger.hasPermission(sender, "command.core.reload"))
             return false;
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                config.loadMessages();
-                config.loadConfig();
+                pluginConfig.loadMessages();
+                pluginConfig.loadConfig();
                 messanger.loadCorePlaceholders();
                 messanger.sendMessage(sender, "plugin-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
                 return false;
@@ -56,15 +80,15 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (args[1].equalsIgnoreCase("messages")) {
                     messanger.loadCorePlaceholders();
-                    config.loadMessages();
+                    pluginConfig.loadMessages();
                     messanger.sendMessage(sender, "messages-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
 
                     return false;
                 }
 
-                if (args[1].equalsIgnoreCase("config")) {
-                    config.loadConfig();
-                    messanger.sendMessage(sender, "config-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
+                if (args[1].equalsIgnoreCase("pluginConfig")) {
+                    pluginConfig.loadConfig();
+                    messanger.sendMessage(sender, "pluginConfig-reloaded", new String[]{"plugin"}, CrownCore.getInstance().getName());
 
                     return false;
                 }
@@ -72,8 +96,8 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
         }
 
         messanger.sendCommandSyntax(sender, "/core",
-                "/core reload : Reloads config and messages.",
-                "/core reload <config/messages> : Reloads config or messages.");
+                "/core reload : Reloads pluginConfig and messages.",
+                "/core reload <pluginConfig/messages> : Reloads pluginConfig or messages.");
 
         return false;
     }
@@ -83,6 +107,11 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
 
         final ArrayList<String> list = new ArrayList<>();
 
+        if (args.length == 1) {
+            list.add("discord");
+            list.add("store");
+        }
+
         if (!sender.hasPermission("command.core.reload"))
             return list;
 
@@ -91,7 +120,7 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 2) {
-            list.add("config");
+            list.add("pluginConfig");
             list.add("messages");
         }
 

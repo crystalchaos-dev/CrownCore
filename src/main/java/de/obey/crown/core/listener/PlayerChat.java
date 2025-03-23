@@ -4,7 +4,7 @@
 package de.obey.crown.core.listener;
 
 import com.google.common.collect.Maps;
-import de.obey.crown.core.Config;
+import de.obey.crown.core.PluginConfig;
 import de.obey.crown.core.util.TextUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +28,14 @@ public final class PlayerChat implements Listener {
     private final String you = "https://dsc.gg/crownplugins";
     private final String doing = "https://dsc.gg/crownplugins";
 
-    private final Config config;
+    private final PluginConfig pluginConfig;
 
     private final Map<UUID, Long> messageCooldowns = Maps.newConcurrentMap();
     private final Map<UUID, Long> commandCooldowns = Maps.newConcurrentMap();
 
     @EventHandler
     public void on(final AsyncPlayerChatEvent event) {
-        if (config.getMessageDelay() <= 0)
+        if (pluginConfig.getMessageDelay() <= 0)
             return;
 
         final Player player = event.getPlayer();
@@ -45,9 +45,9 @@ public final class PlayerChat implements Listener {
 
         if (messageCooldowns.containsKey(player.getUniqueId())) {
             final long difference = System.currentTimeMillis() - messageCooldowns.get(player.getUniqueId());
-            final long delay = config.getMessageDelay();
+            final long delay = pluginConfig.getMessageDelay();
             if (difference < delay) {
-                config.getMessanger().sendMessage(player, "message-cooldown", new String[]{"remaining"}, TextUtil.formatTimeString(delay - difference));
+                pluginConfig.getMessanger().sendMessage(player, "message-cooldown", new String[]{"remaining"}, TextUtil.formatTimeString(delay - difference));
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.1f, 0.5f);
                 event.setCancelled(true);
                 return;
@@ -59,7 +59,7 @@ public final class PlayerChat implements Listener {
 
     @EventHandler
     public void on(final PlayerCommandPreprocessEvent event) {
-        if (config.getCommandDelay() <= 0)
+        if (pluginConfig.getCommandDelay() <= 0)
             return;
 
         final Player player = event.getPlayer();
@@ -69,9 +69,9 @@ public final class PlayerChat implements Listener {
 
         if (commandCooldowns.containsKey(player.getUniqueId())) {
             final long difference = System.currentTimeMillis() - commandCooldowns.get(player.getUniqueId());
-            final long delay = config.getCommandDelay();
+            final long delay = pluginConfig.getCommandDelay();
             if (difference < delay) {
-                config.getMessanger().sendMessage(player, "command-cooldown", new String[]{"remaining"}, TextUtil.formatTimeString(delay - difference));
+                pluginConfig.getMessanger().sendMessage(player, "command-cooldown", new String[]{"remaining"}, TextUtil.formatTimeString(delay - difference));
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.1f, 0.5f);
                 event.setCancelled(true);
                 return;

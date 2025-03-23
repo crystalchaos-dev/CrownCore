@@ -7,8 +7,8 @@ package de.obey.crown.core.util;
 */
 
 import com.google.common.collect.Maps;
-import de.obey.crown.core.Config;
 import de.obey.crown.core.CrownCore;
+import de.obey.crown.core.PluginConfig;
 import de.obey.crown.core.data.plugin.Messanger;
 import de.obey.crown.core.data.plugin.TeleportMessageType;
 import de.obey.crown.core.handler.LocationHandler;
@@ -31,12 +31,12 @@ public class Teleporter {
     private final ArrayList<UUID> isTeleporting = new ArrayList<UUID>();
     private final Map<Player, BossBar> bossaBars = Maps.newConcurrentMap();
 
-    private Config crownConfig;
+    private PluginConfig crownPluginConfig;
     private Messanger messanger;
 
     public void initialize() {
-        crownConfig = CrownCore.getInstance().getCrownConfig();
-        messanger = crownConfig.getMessanger();
+        crownPluginConfig = CrownCore.getInstance().getPluginConfig();
+        messanger = crownPluginConfig.getMessanger();
     }
 
     public void teleportInstant(final Player player, final String locationName) {
@@ -75,7 +75,7 @@ public class Teleporter {
 
     public void teleportWithAnimation(final Player player, final Location location) {
 
-        if (crownConfig.isInstantTeleport()) {
+        if (crownPluginConfig.isInstantTeleport()) {
             teleportInstant(player, location);
             return;
         }
@@ -83,7 +83,7 @@ public class Teleporter {
         if (isTeleporting.contains(player.getUniqueId()))
             return;
 
-        final long cooldown = crownConfig.getTeleportDelay() * 1000L;
+        final long cooldown = crownPluginConfig.getTeleportDelay() * 1000L;
 
         if (location == null)
             return;
@@ -94,7 +94,7 @@ public class Teleporter {
             return;
         }
 
-        if (crownConfig.getInstantTeleportWorlds().contains(player.getWorld().getName())) {
+        if (crownPluginConfig.getInstantTeleportWorlds().contains(player.getWorld().getName())) {
             teleportInstant(player, location);
             return;
         }
@@ -139,7 +139,7 @@ public class Teleporter {
 
                 microticks = 0;
 
-                if ((ticks + 1) >= crownConfig.getTeleportDelay()) {
+                if ((ticks + 1) >= crownPluginConfig.getTeleportDelay()) {
                     teleportInstant(player, location);
                     sendTeleportCompletedMessage(player);
                     removeBossbar(player);
@@ -165,7 +165,7 @@ public class Teleporter {
     }
 
     private void sendTeleportCompletedMessage(final Player player) {
-        if (crownConfig.getTeleportMessageType() == TeleportMessageType.BOSSBAR) {
+        if (crownPluginConfig.getTeleportMessageType() == TeleportMessageType.BOSSBAR) {
 
             if (bossaBars.containsKey(player)) {
                 final BossBar bossBar = bossaBars.get(player);
@@ -186,7 +186,7 @@ public class Teleporter {
     }
 
     private void sendTeleportMessage(final Player player, final int ticks, final long cooldown, final long remaining) {
-        if (crownConfig.getTeleportMessageType() == TeleportMessageType.BOSSBAR) {
+        if (crownPluginConfig.getTeleportMessageType() == TeleportMessageType.BOSSBAR) {
 
             if (bossaBars.containsKey(player)) {
                 final BossBar bossBar = bossaBars.get(player);

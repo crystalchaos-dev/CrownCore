@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public final class Config extends CrownConfig {
+public final class PluginConfig extends CrownConfig {
 
     private final String hi = "https://dsc.gg/crownplugins";
     private final String how = "https://dsc.gg/crownplugins";
@@ -28,10 +28,10 @@ public final class Config extends CrownConfig {
     private TeleportMessageType teleportMessageType;
 
     private int teleportDelay, messageDelay, commandDelay;
-    private boolean instantTeleport = false, instantRespawn = true, teleportOnJoin;
+    private boolean instantTeleport = false, instantRespawn = true, teleportOnJoin, discordCommand, storeCommand;
     private ArrayList<String> instantTeleportWorlds;
 
-    public Config(@NonNull Plugin plugin) {
+    public PluginConfig(@NonNull Plugin plugin) {
         super(plugin);
     }
 
@@ -46,6 +46,9 @@ public final class Config extends CrownConfig {
         setInstantTeleportWorlds(FileUtil.getStringArrayList(configuration, "instant-teleport-worlds", new ArrayList<>()));
         setMessageDelay(FileUtil.getInt(configuration, "message-cooldown", 0));
         setCommandDelay(FileUtil.getInt(configuration, "command-cooldown", 0));
+
+        setDiscordCommand(FileUtil.getBoolean(configuration, "discord-command", false));
+        setStoreCommand(FileUtil.getBoolean(configuration, "store-command", false));
 
         FileUtil.saveConfigurationIntoFile(configuration, file);
     }

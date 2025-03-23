@@ -1,6 +1,7 @@
 package de.obey.crown.core;
 
 import de.obey.crown.core.command.CoreCommand;
+import de.obey.crown.core.command.InfoCommands;
 import de.obey.crown.core.command.LocationCommand;
 import de.obey.crown.core.event.CoreStartEvent;
 import de.obey.crown.core.handler.LocationHandler;
@@ -26,7 +27,7 @@ public final class CrownCore extends JavaPlugin {
 
     private boolean coreStarted = false, placeholderapi = false;
 
-    private Config crownConfig;
+    private PluginConfig pluginConfig;
 
     @Override
     public void onEnable() {
@@ -41,16 +42,14 @@ public final class CrownCore extends JavaPlugin {
         FileUtil.getGeneratedCoreFile("messages.yml", true);
         FileUtil.getGeneratedCoreFile("config.yml", true);
 
-        crownConfig = new Config(this);
+        pluginConfig = new PluginConfig(this);
         new Placeholders().register();
-
-        load();
 
         final AtomicInteger counter = new AtomicInteger();
         Bukkit.getScheduler().runTaskTimer(this, (runnable) -> {
 
             if (counter.get() == 2) {
-                crownConfig.getMessanger().loadCorePlaceholders();
+                pluginConfig.getMessanger().loadCorePlaceholders();
                 LocationHandler.loadLocations();
                 Teleporter.initialize();
             }
@@ -58,6 +57,7 @@ public final class CrownCore extends JavaPlugin {
             if (counter.get() == 5) {
                 coreStarted = true;
                 getServer().getPluginManager().callEvent(new CoreStartEvent());
+                load();
                 runnable.cancel();
                 return;
             }
@@ -71,26 +71,34 @@ public final class CrownCore extends JavaPlugin {
         LocationHandler.saveLocations();
     }
 
-    private void load() {
+    public void load() {
         loadListener();
         loadCommand();
     }
 
     private void loadCommand() {
-        final LocationCommand locationCommand = new LocationCommand(crownConfig.getMessanger());
+        final LocationCommand locationCommand = new LocationCommand(pluginConfig.getMessanger());
         getCommand("location").setExecutor(locationCommand);
         getCommand("location").setTabCompleter(locationCommand);
 
-        final CoreCommand coreCommand = new CoreCommand(crownConfig.getMessanger(), crownConfig);
+        final CoreCommand coreCommand = new CoreCommand(pluginConfig.getMessanger(), pluginConfig);
         getCommand("crowncore").setExecutor(coreCommand);
         getCommand("crowncore").setTabCompleter(coreCommand);
+
+        final InfoCommands infoCommands = new InfoCommands(pluginConfig.getMessanger());
+        if (pluginConfig.isDiscordCommand()) {
+            getCommand("discord").setExecutor(infoCommands);
+        }
+        if (pluginConfig.isStoreCommand()) {
+            getCommand("store").setExecutor(infoCommands);
+        }
     }
 
     private void loadListener() {
         final PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvents(new PlayerLogin(this), this);
-        pluginManager.registerEvents(new PlayerChat(crownConfig), this);
+        pluginManager.registerEvents(new PlayerChat(pluginConfig), this);
     }
 
     public static CrownCore getInstance() {
