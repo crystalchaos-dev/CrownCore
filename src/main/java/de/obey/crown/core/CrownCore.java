@@ -1,11 +1,11 @@
 package de.obey.crown.core;
 
 import de.obey.crown.core.command.CoreCommand;
-import de.obey.crown.core.command.InfoCommands;
 import de.obey.crown.core.command.LocationCommand;
 import de.obey.crown.core.event.CoreStartEvent;
 import de.obey.crown.core.handler.LocationHandler;
 import de.obey.crown.core.listener.PlayerChat;
+import de.obey.crown.core.listener.PlayerCommandPreprocess;
 import de.obey.crown.core.listener.PlayerLogin;
 import de.obey.crown.core.util.FileUtil;
 import de.obey.crown.core.util.Teleporter;
@@ -84,14 +84,6 @@ public final class CrownCore extends JavaPlugin {
         final CoreCommand coreCommand = new CoreCommand(pluginConfig.getMessanger(), pluginConfig);
         getCommand("crowncore").setExecutor(coreCommand);
         getCommand("crowncore").setTabCompleter(coreCommand);
-
-        final InfoCommands infoCommands = new InfoCommands(pluginConfig.getMessanger());
-        if (pluginConfig.isDiscordCommand()) {
-            getCommand("discord").setExecutor(infoCommands);
-        }
-        if (pluginConfig.isStoreCommand()) {
-            getCommand("store").setExecutor(infoCommands);
-        }
     }
 
     private void loadListener() {
@@ -99,6 +91,7 @@ public final class CrownCore extends JavaPlugin {
 
         pluginManager.registerEvents(new PlayerLogin(this), this);
         pluginManager.registerEvents(new PlayerChat(pluginConfig), this);
+        pluginManager.registerEvents(new PlayerCommandPreprocess(pluginConfig, pluginConfig.getMessanger()), this);
     }
 
     public static CrownCore getInstance() {

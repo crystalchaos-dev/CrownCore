@@ -22,12 +22,6 @@ import java.util.UUID;
 @NonNull
 public final class PlayerChat implements Listener {
 
-    private final String hi = "https://dsc.gg/crownplugins";
-    private final String how = "https://dsc.gg/crownplugins";
-    private final String are = "https://dsc.gg/crownplugins";
-    private final String you = "https://dsc.gg/crownplugins";
-    private final String doing = "https://dsc.gg/crownplugins";
-
     private final PluginConfig pluginConfig;
 
     private final Map<UUID, Long> messageCooldowns = Maps.newConcurrentMap();

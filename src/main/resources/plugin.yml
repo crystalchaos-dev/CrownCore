@@ -1,5 +1,5 @@
 name: CrownCore
-version: 1.1.7
+version: 1.1.8
 main: de.obey.crown.core.CrownCore
 author: Obey
 website: dsc.gg/crownplugins
@@ -12,5 +12,3 @@ softdepend:
 commands:
   location:
   crowncore:
-  discord:
-  store:

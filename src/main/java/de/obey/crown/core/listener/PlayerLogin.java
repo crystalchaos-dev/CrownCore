@@ -14,12 +14,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 @NonNull
 public final class PlayerLogin implements Listener {
 
-    private final String hi = "https://dsc.gg/crownplugins";
-    private final String how = "https://dsc.gg/crownplugins";
-    private final String are = "https://dsc.gg/crownplugins";
-    private final String you = "https://dsc.gg/crownplugins";
-    private final String doing = "https://dsc.gg/crownplugins";
-
     private final CrownCore crownCore;
 
     @EventHandler
