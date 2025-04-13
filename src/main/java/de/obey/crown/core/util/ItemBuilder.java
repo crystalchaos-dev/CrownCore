@@ -170,8 +170,8 @@ public final class ItemBuilder {
 
         fireworkMeta = (FireworkEffectMeta) meta;
         fireworkMeta.setEffect(effect);
-        fireworkMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-
+//        fireworkMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        fireworkMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         return this;
     }
 

@@ -6,18 +6,19 @@ package de.obey.crown.core.util.effects;
 
 */
 
+import com.xyrisdev.library.scheduler.XRunnable;
+import com.xyrisdev.library.scheduler.scheduling.tasks.MyScheduledTask;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 public class TeleportEffect {
 
     private final Particle particle;
 
     private final int count;
-    private BukkitTask runnable;
+//    private BukkitTask runnable;
+    private MyScheduledTask runnable;
 
     public TeleportEffect(final Particle particle, final int count) {
 
@@ -27,7 +28,8 @@ public class TeleportEffect {
 
     public void run(final Plugin plugin, final Player player, final int waitBetweenTick, Particle.DustOptions dustOptions) {
         if (runnable == null) {
-            runnable = new BukkitRunnable() {
+//            runnable = new BukkitRunnable() {
+            runnable = new XRunnable() {
                 int ticks = 0;
                 int state = 0;
                 double angle = 0;

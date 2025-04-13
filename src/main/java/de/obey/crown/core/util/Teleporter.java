@@ -7,6 +7,7 @@ package de.obey.crown.core.util;
 */
 
 import com.google.common.collect.Maps;
+import com.xyrisdev.library.scheduler.XRunnable;
 import de.obey.crown.core.CrownCore;
 import de.obey.crown.core.PluginConfig;
 import de.obey.crown.core.data.plugin.Messanger;
@@ -19,7 +20,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -47,7 +47,8 @@ public class Teleporter {
             return;
         }
 
-        player.teleport(location);
+//        player.teleport(location);
+        player.teleportAsync(location);
         player.playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.5f, 3f);
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_TELEPORT, 0.5f, 3f);
     }
@@ -57,7 +58,8 @@ public class Teleporter {
             return;
         }
 
-        player.teleport(location);
+//        player.teleport(location);
+        player.teleportAsync(location);
         player.playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.5f, 3f);
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_TELEPORT, 0.5f, 3f);
     }
@@ -108,7 +110,8 @@ public class Teleporter {
 
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 0.5f, 0.6f);
 
-        new BukkitRunnable() {
+//        new BukkitRunnable() {
+        new XRunnable() {
 
             final Location saved = player.getLocation();
             long remain = cooldown;

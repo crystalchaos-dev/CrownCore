@@ -1,5 +1,7 @@
 package de.obey.crown.core;
 
+import com.xyrisdev.library.scheduler.XScheduler;
+import com.xyrisdev.library.scheduler.scheduling.schedulers.TaskScheduler;
 import de.obey.crown.core.command.CoreCommand;
 import de.obey.crown.core.command.LocationCommand;
 import de.obey.crown.core.event.CoreStartEvent;
@@ -29,8 +31,16 @@ public final class CrownCore extends JavaPlugin {
 
     private PluginConfig pluginConfig;
 
+    // Folia support - being
+    private static TaskScheduler scheduler;
+    // Folia support - end
+
     @Override
     public void onEnable() {
+        // Folia support - being
+        scheduler = XScheduler.of(this);
+        // Folia support - end
+
         // create core data folder
         if (!getDataFolder().exists())
             getDataFolder().mkdir();
@@ -45,25 +55,35 @@ public final class CrownCore extends JavaPlugin {
         pluginConfig = new PluginConfig(this);
         new Placeholders().register();
 
-        final AtomicInteger counter = new AtomicInteger();
-        Bukkit.getScheduler().runTaskTimer(this, (runnable) -> {
+//        What the fuck is this??
+//        final AtomicInteger counter = new AtomicInteger();
+//        Bukkit.getScheduler().runTaskTimer(this, (runnable) -> {
+//
+//            if (counter.get() == 2) {
+//                pluginConfig.getMessanger().loadCorePlaceholders();
+//                LocationHandler.loadLocations();
+//                Teleporter.initialize();
+//            }
+//
+//            if (counter.get() == 5) {
+//                coreStarted = true;
+//                getServer().getPluginManager().callEvent(new CoreStartEvent());
+//                load();
+//                runnable.cancel();
+//                return;
+//            }
+//
+//            counter.incrementAndGet();
+//        }, 20, 20);
 
-            if (counter.get() == 2) {
-                pluginConfig.getMessanger().loadCorePlaceholders();
-                LocationHandler.loadLocations();
-                Teleporter.initialize();
-            }
 
-            if (counter.get() == 5) {
-                coreStarted = true;
-                getServer().getPluginManager().callEvent(new CoreStartEvent());
-                load();
-                runnable.cancel();
-                return;
-            }
+        pluginConfig.getMessanger().loadCorePlaceholders();
+        LocationHandler.loadLocations();
+        Teleporter.initialize();
 
-            counter.incrementAndGet();
-        }, 20, 20);
+        coreStarted = true;
+        Bukkit.getPluginManager().callEvent(new CoreStartEvent());
+        load();
     }
 
     @Override
@@ -97,4 +117,10 @@ public final class CrownCore extends JavaPlugin {
     public static CrownCore getInstance() {
         return getPlugin(CrownCore.class);
     }
+
+    // Folia support - begin
+    public static TaskScheduler scheduler() {
+        return scheduler;
+    }
+    // Folia support - end
 }

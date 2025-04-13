@@ -3,6 +3,7 @@
 
 package de.obey.crown.core.util;
 
+import com.xyrisdev.library.scheduler.XRunnable;
 import de.obey.crown.core.CrownCore;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
@@ -10,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 @UtilityClass
 public final class InventoryUtil {
@@ -77,8 +77,8 @@ public final class InventoryUtil {
                 player.getInventory().setItemInOffHand(item);
                 return;
             }
-
-            new BukkitRunnable() {
+//            new BukkitRunnable() {
+            new XRunnable() {
                 @Override
                 public void run() {
                     player.getWorld().dropItem(player.getLocation(), item.clone());

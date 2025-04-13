@@ -42,7 +42,8 @@ public class CrownConfig implements CrowPlugin {
 
         messanger = new Messanger(plugin);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+//        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        CrownCore.scheduler().runTaskLater(() -> {
             loadConfig();
             loadMessages();
         }, 5);

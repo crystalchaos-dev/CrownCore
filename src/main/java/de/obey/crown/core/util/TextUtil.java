@@ -248,8 +248,10 @@ public final class TextUtil {
         return -1;
     }
 
+    @SuppressWarnings("deprecation")
     public void sendActionBar(final Player player, final String message) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(translateColors(message)));
+//        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(translateColors(message)));
+        player.sendActionBar(translateColors(message));
     }
 
     private final Pattern HEX_PATTERN = Pattern.compile("#[A-Fa-f0-9]{6}");
