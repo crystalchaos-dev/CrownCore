@@ -424,9 +424,10 @@ public final class Messanger {
 
 
         for (final String line : lines) {
-            Bukkit.getConsoleSender().sendMessage(line);
+            final String coloredLine = TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, line));
+            Bukkit.getConsoleSender().sendMessage(coloredLine);
             for (Player all : Bukkit.getOnlinePlayers()) {
-                all.sendMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, line)));
+                all.sendMessage(coloredLine);
             }
         }
     }
@@ -479,9 +480,10 @@ public final class Messanger {
 
 
         for (final String translatedLine : temp) {
-            Bukkit.getConsoleSender().sendMessage(translatedLine);
+            final String line = TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, translatedLine));
+            Bukkit.getConsoleSender().sendMessage(line);
             for (Player all : Bukkit.getOnlinePlayers()) {
-                all.sendMessage(TextUtil.translateColors(PlaceholderAPI.setPlaceholders(null, translatedLine)));
+                all.sendMessage(line);
             }
         }
     }

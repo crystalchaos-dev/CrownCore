@@ -14,13 +14,7 @@ import java.io.File;
 
 @Getter
 public class CrownConfig implements CrowPlugin {
-
-    private final String hi = "https://dsc.gg/crownplugins";
-    private final String how = "https://dsc.gg/crownplugins";
-    private final String are = "https://dsc.gg/crownplugins";
-    private final String you = "https://dsc.gg/crownplugins";
-    private final String doing = "https://dsc.gg/crownplugins";
-
+    
     private final CrownCore crownCore = CrownCore.getInstance();
     @NonNull
     private final Plugin plugin;
